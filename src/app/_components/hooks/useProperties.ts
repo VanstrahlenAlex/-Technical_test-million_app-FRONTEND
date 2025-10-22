@@ -1,4 +1,3 @@
-// src/app/_components/hooks/useProperties.ts
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PropertyFilters, CreatePropertyDto } from '@/core/domain/entities/property.entity';
@@ -12,11 +11,10 @@ import {
 } from '@/core/application/useCases/get-properties.usecase';
 import { toast } from 'sonner';
 
-// ===== DEPENDENCY INJECTION =====
-// Singleton del gateway
+
 const propertyGateway = new HttpPropertyGateway();
 
-// Casos de uso
+
 const getPropertiesUseCase = new GetPropertiesUseCase(propertyGateway);
 const getPropertyDetailUseCase = new GetPropertyDetailUseCase(propertyGateway);
 const createPropertyUseCase = new CreatePropertyUseCase(propertyGateway);
@@ -34,26 +32,22 @@ export const propertyKeys = {
 
 // ===== HOOKS =====
 
-/**
- * Hook para obtener lista de propiedades
- */
+
 export function useProperties(filters?: PropertyFilters) {
 	return useQuery({
 		queryKey: propertyKeys.list(filters),
 		queryFn: async () => {
 			const response = await getPropertiesUseCase.execute(filters);
-			return response.Data; // Retorna solo el PagedResult
+			return response.Data; 
 		},
-		staleTime: 1000 * 60 * 5, // 5 minutos
-		gcTime: 1000 * 60 * 30, // 30 minutos (cacheTime deprecado)
+		staleTime: 1000 * 60 * 5, 
+		gcTime: 1000 * 60 * 30, 
 		retry: 2,
 		retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
 	});
 }
 
-/**
- * Hook para obtener detalle de una propiedad
- */
+
 export function usePropertyDetail(id: string, enabled = true) {
 	return useQuery({
 		queryKey: propertyKeys.detail(id),
@@ -64,9 +58,7 @@ export function usePropertyDetail(id: string, enabled = true) {
 	});
 }
 
-/**
- * Hook para crear propiedad
- */
+
 export function useCreateProperty() {
 	const queryClient = useQueryClient();
 
@@ -87,9 +79,7 @@ export function useCreateProperty() {
 	});
 }
 
-/**
- * Hook para actualizar propiedad
- */
+
 export function useUpdateProperty() {
 	const queryClient = useQueryClient();
 
@@ -111,9 +101,7 @@ export function useUpdateProperty() {
 	});
 }
 
-/**
- * Hook para eliminar propiedad
- */
+
 export function useDeleteProperty() {
 	const queryClient = useQueryClient();
 
@@ -131,9 +119,7 @@ export function useDeleteProperty() {
 	});
 }
 
-/**
- * Hook para verificar salud de la API
- */
+
 export function useApiHealth() {
 	return useQuery({
 		queryKey: ['api-health'],
