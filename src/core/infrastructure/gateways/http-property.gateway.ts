@@ -56,32 +56,84 @@ export class HttpPropertyGateway implements IPropertyRepository {
 		this.api.interceptors.response.use(
 			(response) => {
 				if (process.env.NODE_ENV === 'development') {
-					console.log(`[API Response] ${response.config.url}`, response.data);
+					console.log(`[API Response Success] ${response.status} ${response.config.url}`, response.data);
 				}
 				return response;
 			},
 			(error: AxiosError) => {
-				return this.handleError(error);
+				console.error('[API Response Error Interceptor]', {
+					url: error.config?.url,
+					method: error.config?.method,
+					status: error.response?.status,
+					statusText: error.response?.statusText,
+					data: error.response?.data,
+					headers: error.response?.headers,
+				});
+				return Promise.reject(error);
 			}
 		);
 	}
 
 
+
 	private handleError(error: AxiosError): never {
 		if (error.response) {
-			const apiError = error.response.data as ApiResponse<any>;
-			const errorMessage = apiError?.Message || 'Error en la petición al servidor';
+			const responseData = error.response.data as any;
 
-			console.error('[API Error]', {
+			console.error('[API Error Full Response]', {
 				status: error.response.status,
-				message: errorMessage,
-				errors: apiError?.Errors,
+				statusText: error.response.statusText,
+				data: responseData,
 				url: error.config?.url,
+				method: error.config?.method,
 			});
 
-			throw new Error(errorMessage);
+			let errorMessage = 'Error en la petición al servidor';
+			let errorDetails: string[] = [];
+
+
+			if (responseData) {
+				if (responseData.Message) {
+					errorMessage = responseData.Message;
+				} else if (responseData.message) {
+					errorMessage = responseData.message;
+				} else if (typeof responseData === 'string') {
+					errorMessage = responseData;
+				} else if (Array.isArray(responseData.errors)) {
+					errorDetails = responseData.errors.filter((err: any) => typeof err === 'string');
+					errorMessage = errorDetails.length > 0 ? 'Errores de validación' : errorMessage;
+				} else if (responseData.errors && typeof responseData.errors === 'object') {
+					try {
+						errorDetails = Object.values(responseData.errors)
+							.flat()
+							.filter((err: any) => typeof err === 'string') as string[];
+						errorMessage = errorDetails.length > 0 ? 'Errores de validación' : errorMessage;
+					} catch (e) {
+						console.warn('[API Error] No se pudieron extraer detalles del error:', e);
+					}
+				} else if (responseData.title) {
+					errorMessage = responseData.title;
+					if (responseData.detail) {
+						errorDetails = [responseData.detail];
+					}
+				}
+			}
+
+			if (errorMessage === 'Error en la petición al servidor' && error.response.status) {
+				errorMessage = `Error ${error.response.status}: ${error.response.statusText || 'Error del servidor'}`;
+			}
+
+			const finalMessage = errorDetails.length > 0
+				? `${errorMessage}: ${errorDetails.join(', ')}`
+				: errorMessage;
+
+			throw new Error(finalMessage);
+
 		} else if (error.request) {
-			console.error('[Network Error]', error.message);
+			console.error('[Network Error]', {
+				message: error.message,
+				request: error.request
+			});
 			throw new Error('No se pudo conectar con el servidor. Verifica tu conexión a internet.');
 		} else {
 			console.error('[Request Setup Error]', error.message);
@@ -126,7 +178,6 @@ export class HttpPropertyGateway implements IPropertyRepository {
 
 			const response = await this.api.get(url);
 
-			// Validar respuesta con Zod
 			const validatedData = PropertyListResponseSchema.parse(response.data);
 
 			return validatedData;
@@ -134,7 +185,7 @@ export class HttpPropertyGateway implements IPropertyRepository {
 			if (error instanceof Error) {
 				throw error;
 			}
-			throw new Error('Error al obtener propiedades');
+			throw new Error('Error getting properties');
 		}
 	}
 
@@ -147,7 +198,7 @@ export class HttpPropertyGateway implements IPropertyRepository {
 			const validatedData = PropertyDetailResponseSchema.parse(response.data);
 
 			if (!validatedData.Success || !validatedData.Data) {
-				throw new Error(validatedData.Message || 'Propiedad no encontrada');
+				throw new Error(validatedData.Message || 'Property not found');
 			}
 
 			return validatedData;
@@ -155,7 +206,7 @@ export class HttpPropertyGateway implements IPropertyRepository {
 			if (error instanceof Error) {
 				throw error;
 			}
-			throw new Error('Error al obtener la propiedad');
+			throw new Error('Error getting property');
 		}
 	}
 
@@ -163,7 +214,6 @@ export class HttpPropertyGateway implements IPropertyRepository {
 		try {
 			const response = await this.api.post('/Properties', property);
 
-			// Validar respuesta con Zod
 			const validatedData = PropertyDetailResponseSchema.parse(response.data);
 
 			return validatedData;
@@ -171,7 +221,7 @@ export class HttpPropertyGateway implements IPropertyRepository {
 			if (error instanceof Error) {
 				throw error;
 			}
-			throw new Error('Error al crear la propiedad');
+			throw new Error('Error creating property');
 		}
 	}
 
@@ -191,7 +241,7 @@ export class HttpPropertyGateway implements IPropertyRepository {
 			if (error instanceof Error) {
 				throw error;
 			}
-			throw new Error('Error al actualizar la propiedad');
+			throw new Error('Error updating property');
 		}
 	}
 
@@ -202,7 +252,7 @@ export class HttpPropertyGateway implements IPropertyRepository {
 			return {
 				Success: true,
 				Data: true,
-				Message: 'Propiedad eliminada exitosamente',
+				Message: 'Property successfully deleted',
 				Errors: [],
 				Timestamp: new Date().toISOString(),
 			};

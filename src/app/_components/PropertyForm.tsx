@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Save, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface PropertyFormProps {
 	initialData?: Partial<CreatePropertyDto>;
@@ -55,6 +56,7 @@ export function PropertyForm({
 			}
 		} catch (error) {
 			console.error('Error submitting form:', error);
+			toast.error("Error submitting form.")
 		}
 	};
 
@@ -62,12 +64,12 @@ export function PropertyForm({
 		<Card>
 			<CardHeader>
 				<CardTitle>
-					{mode === 'create' ? 'Crear Nueva Propiedad' : 'Editar Propiedad'}
+					{mode === 'create' ? 'Create New Property' : 'Edit Property'}
 				</CardTitle>
 				<CardDescription>
 					{mode === 'create'
-						? 'Completa los datos para agregar una nueva propiedad'
-						: 'Actualiza la información de la propiedad'}
+						? 'Complete the data to add a new property'
+						: 'Update property information'}
 				</CardDescription>
 			</CardHeader>
 

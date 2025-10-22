@@ -1,5 +1,3 @@
-// src/app/properties/edit/[id]/page.tsx
-
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -54,7 +52,7 @@ export default function EditPropertyPage() {
 				<div className="container mx-auto px-4 py-8 max-w-4xl">
 					<Alert variant="destructive">
 						<AlertCircle className="h-5 w-5" />
-						<AlertTitle>Error al cargar la propiedad</AlertTitle>
+						<AlertTitle>Error loading property</AlertTitle>
 						<AlertDescription>
 							{error instanceof Error ? error.message : 'Propiedad no encontrada'}
 						</AlertDescription>
@@ -65,7 +63,7 @@ export default function EditPropertyPage() {
 						className="mt-4"
 					>
 						<ArrowLeft className="w-4 h-4 mr-2" />
-						Volver a propiedades
+						Return to properties
 					</Button>
 				</div>
 			</div>
@@ -87,7 +85,7 @@ export default function EditPropertyPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
+		<div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 pt-15">
 			<div className="container mx-auto px-4 py-8 max-w-4xl">
 
 				<div className="mb-6">
@@ -98,17 +96,17 @@ export default function EditPropertyPage() {
 						className="mb-4"
 					>
 						<ArrowLeft className="w-4 h-4 mr-2" />
-						Volver
+						Back
 					</Button>
 
 					<div className="flex items-center gap-3">
 						<Edit className="w-8 h-8 text-blue-600" />
 						<div>
 							<h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-								Editar Propiedad
+								Edit Property
 							</h1>
 							<p className="text-gray-600 dark:text-gray-400">
-								Modifica la información de {property.Name}
+								Modify the information of {property.Name}
 							</p>
 						</div>
 					</div>

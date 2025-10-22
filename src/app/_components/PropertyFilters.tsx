@@ -1,4 +1,3 @@
-// src/app/_components/PropertyFilters.tsx
 
 'use client';
 
@@ -88,7 +87,7 @@ export function PropertyFilters({ onFiltersChange, initialFilters }: PropertyFil
 						/>
 					</div>
 
-					{/* Dirección */}
+				
 					<div className="space-y-2">
 						<Label htmlFor="address">Address</Label>
 						<Input
@@ -101,7 +100,7 @@ export function PropertyFilters({ onFiltersChange, initialFilters }: PropertyFil
 						/>
 					</div>
 
-					{/* Ciudad */}
+					
 					<div className="space-y-2">
 						<Label htmlFor="city">City</Label>
 						<Input
@@ -114,7 +113,7 @@ export function PropertyFilters({ onFiltersChange, initialFilters }: PropertyFil
 						/>
 					</div>
 
-					{/* Estado/Departamento */}
+					
 					<div className="space-y-2">
 						<Label htmlFor="state">State/Department</Label>
 						<Input
@@ -127,7 +126,7 @@ export function PropertyFilters({ onFiltersChange, initialFilters }: PropertyFil
 						/>
 					</div>
 
-					{/* Precio Mínimo */}
+					
 					<div className="space-y-2">
 						<Label htmlFor="minPrice">Min price ($)</Label>
 						<Input
@@ -142,7 +141,7 @@ export function PropertyFilters({ onFiltersChange, initialFilters }: PropertyFil
 						/>
 					</div>
 
-					{/* Precio Máximo */}
+					
 					<div className="space-y-2">
 						<Label htmlFor="maxPrice">Max Price ($)</Label>
 						<Input
@@ -157,7 +156,7 @@ export function PropertyFilters({ onFiltersChange, initialFilters }: PropertyFil
 						/>
 					</div>
 
-					{/* Año */}
+					
 					<div className="space-y-2">
 						<Label htmlFor="year">Year of Build</Label>
 						<Input
@@ -173,7 +172,7 @@ export function PropertyFilters({ onFiltersChange, initialFilters }: PropertyFil
 					</div>
 				</div>
 
-				{/* Botones de Acción */}
+				
 				<div className="flex flex-col sm:flex-row gap-3 pt-2">
 					<Button
 						onClick={handleSearch}

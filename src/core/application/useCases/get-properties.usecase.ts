@@ -88,21 +88,21 @@ export class CreatePropertyUseCase {
 			const result = await this.propertyRepository.create(validatedData);
 
 			if (!result.Success || !result.Data) {
-				throw new Error(result.Message || 'Error al crear la propiedad');
+				throw new Error(result.Message || 'Error creating property');
 			}
 
 			return result.Data;
 		} catch (error) {
 			if (error instanceof ZodError) {
 				const errors = error.issues.map((e : any) => e.message).join(', ');
-				throw new Error(`Errores de validación: ${errors}`);
+				throw new Error(`Validation errors: ${errors}`);
 			}
 
 			if (error instanceof Error) {
 				throw error;
 			}
 
-			throw new Error('Error desconocido al crear la propiedad');
+			throw new Error('Unknown error creating property');
 		}
 	}
 }
@@ -116,31 +116,31 @@ export class UpdatePropertyUseCase {
 		propertyData: Partial<CreatePropertyDto>
 	): Promise<PropertyEntity> {
 		if (!id || id.trim().length === 0) {
-			throw new Error('El ID de la propiedad es requerido');
+			throw new Error('Property ID is required');
 		}
 
 		try {
-			// Validación parcial con Zod
+
 			const validatedData = CreatePropertyDtoSchema.partial().parse(propertyData);
 
 			const result = await this.propertyRepository.update(id, validatedData);
 
 			if (!result.Success || !result.Data) {
-				throw new Error(result.Message || 'Error al actualizar la propiedad');
+				throw new Error(result.Message || 'Error updating property');
 			}
 
 			return result.Data;
 		} catch (error) {
 			if (error instanceof ZodError) {
 				const errors = error.issues.map((e) => e.message).join(', ');
-				throw new Error(`Errores de validación: ${errors}`);
+				throw new Error(`Validation errors: ${errors}`);
 			}
 
 			if (error instanceof Error) {
 				throw error;
 			}
 
-			throw new Error('Error desconocido al actualizar la propiedad');
+			throw new Error('Unknown error while updating property');
 		}
 	}
 }
