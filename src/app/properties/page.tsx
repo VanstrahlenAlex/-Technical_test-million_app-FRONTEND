@@ -10,7 +10,9 @@ import { PropertyCard } from '@/app/_components/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertCircle, Home, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, AlertCircle, Home, ChevronLeft, ChevronRight, PlusCircle } from 'lucide-react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function PropertiesPage() {
 	const [filters, setFilters] = useState<IPropertyFilters>({
@@ -35,15 +37,28 @@ export default function PropertiesPage() {
 			<div className="container mx-auto px-4 py-8 max-w-7xl">
 				{/* Header */}
 				<div className="mb-8">
-					<div className="flex items-center gap-3 mb-2">
-						<Home className="w-8 h-8 text-blue-600" />
-						<h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-							Available Properties
-						</h1>
+					<div className="flex items-center justify-between mb-2">
+						<div className="flex items-center gap-3">
+							<Home className="w-8 h-8 text-blue-600" />
+							<div>
+								<h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+									Available Properties
+								</h1>
+								<p className="text-gray-600 dark:text-gray-400 text-lg">
+									Find the perfect property for you
+								</p>
+							</div>
+						</div>
+						<Link href={'/properties/create'}>
+						<Button
+							size="lg"
+							className="gap-2"
+						>
+							<PlusCircle className="w-5 h-5" />
+							New Property
+						</Button>
+					</Link>
 					</div>
-					<p className="text-gray-600 dark:text-gray-400 text-lg">
-						Find the perfect property for you
-					</p>
 				</div>
 
 				{/* Filtros */}
@@ -54,7 +69,7 @@ export default function PropertiesPage() {
 					/>
 				</div>
 
-				{/* Loading State */}
+				
 				{isLoading && (
 					<div className="space-y-6">
 						<div className="flex justify-center items-center py-12">
@@ -72,7 +87,7 @@ export default function PropertiesPage() {
 					</div>
 				)}
 
-				{/* Error State */}
+				
 				{isError && (
 					<Alert variant="destructive">
 						<AlertCircle className="h-5 w-5" />
@@ -83,10 +98,10 @@ export default function PropertiesPage() {
 					</Alert>
 				)}
 
-				{/* Results */}
+				
 				{data && !isLoading && (
 					<>
-						{/* Stats */}
+						
 						<div className="mb-6 flex items-center justify-between">
 							<div className="text-sm text-gray-600 dark:text-gray-400">
 								Showing{' '}
@@ -113,7 +128,7 @@ export default function PropertiesPage() {
 							</div>
 						</div>
 
-						{/* Empty State */}
+						
 						{data.Items.length === 0 ? (
 							<div className="text-center py-20">
 								<Home className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -126,14 +141,14 @@ export default function PropertiesPage() {
 							</div>
 						) : (
 							<>
-								{/* Grid de Propiedades */}
+								
 								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
 									{data.Items.map((property) => (
 										<PropertyCard key={property.Id} property={property} />
 									))}
 								</div>
 
-								{/* Paginación */}
+								
 								{data.TotalPages > 1 && (
 									<div className="flex items-center justify-center gap-2">
 										<Button
