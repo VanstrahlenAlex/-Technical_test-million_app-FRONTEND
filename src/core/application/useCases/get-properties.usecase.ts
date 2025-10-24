@@ -82,7 +82,6 @@ export class CreatePropertyUseCase {
 
 	async execute(propertyData: CreatePropertyDto): Promise<PropertyEntity> {
 		try {
-			// Validar con Zod
 			const validatedData = CreatePropertyDtoSchema.parse(propertyData);
 
 			const result = await this.propertyRepository.create(validatedData);

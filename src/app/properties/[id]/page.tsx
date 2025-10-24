@@ -44,7 +44,7 @@ export default function PropertyDetailPage() {
           <CardContent className="pt-6">
             <Alert variant="destructive">
               <AlertCircle className="h-5 w-5" />
-              <AlertTitle>Error al cargar la propiedad</AlertTitle>
+              <AlertTitle>Error loading property</AlertTitle>
               <AlertDescription>
                 {error instanceof Error ? error.message : 'Propiedad no encontrada'}
               </AlertDescription>
@@ -55,7 +55,7 @@ export default function PropertyDetailPage() {
               className="w-full mt-4"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver a propiedades
+						Return to properties
             </Button>
           </CardContent>
         </Card>
@@ -141,13 +141,13 @@ export default function PropertyDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5" />
-                  Información del Propietario
+                  Owner Information
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Nombre:</span>
+                    <span className="text-gray-600 dark:text-gray-400">Name:</span>
                     <span className="font-semibold text-gray-900 dark:text-white">
                       {property.OwnerName}
                     </span>
@@ -182,7 +182,7 @@ export default function PropertyDetailPage() {
 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">ID Propiedad:</span>
+                    <span className="text-gray-600 dark:text-gray-400">ID Property:</span>
                     <span className="font-mono text-xs text-gray-700 dark:text-gray-300">
                       {property.Id}
                     </span>
@@ -191,7 +191,7 @@ export default function PropertyDetailPage() {
 
 
                 <Button className="w-full" size="lg">
-                  Contactar
+                  Contact
                 </Button>
               </CardContent>
             </Card>
